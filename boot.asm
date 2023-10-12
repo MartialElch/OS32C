@@ -13,10 +13,10 @@
 	mov si, msg_prot	; tell user we are going to protected mode
 	call sprint
 
-	cli			; no interrupt
-	push ds			; save real mode
-	lidt [idtr]		; load idt register
-	lgdt [gdtr]		; load gdt register
+	cli					; no interrupt
+	push ds				; save real mode
+	lidt [idtr]			; load idt register
+	lgdt [gdtr]			; load gdt register
 
 	call reprogram_pic
 
@@ -30,10 +30,10 @@
 ;--------------------
 bits 32
 go_pm:
-	mov ax, datasel			; set data selector
+	mov ax, datasel		; set data selector
 	mov ds, ax
 	mov es, ax
-	mov ax, videosel		; set videoselector
+	mov ax, videosel	; set videoselector
 	mov gs, ax
 
 	jmp 0x10000
@@ -43,18 +43,18 @@ bits 16
 ;------------------------------------
 sprint:
 	mov ah, 0x0E		; set color
-	lodsb			; read next byte
-	cmp al, 0		; end if 0
+	lodsb				; read next byte
+	cmp al, 0			; end if 0
 	jz sprint_exit
-	int 0x10		; write char
-	jmp sprint		; next
+	int 0x10			; write char
+	jmp sprint			; next
 sprint_exit:
 	ret
 
 ;--------------------
 read_floppy:
 	mov ah, 0x00		; reset floppy controller
-	int 0x13		; execute command
+	int 0x13			; execute command
 	jc error
 
 	mov ax, 0x1000		; set buffer address
@@ -67,7 +67,7 @@ read_sector:
 	mov ch, 0x00		; track  = 1
 	mov cl, 0x02		; sector = 2
 	mov dh, 0x00		; head   = 1
-	int 0x13		; execute command
+	int 0x13			; execute command
 	jc error
 
 read_done:
