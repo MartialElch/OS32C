@@ -1,6 +1,7 @@
-#include <stdint.h>
-
 /******************************************************************************/
+#define VGA_WIDTH  80
+#define VGA_HEIGHT 25
+
 #define COLOR	0x0a
 
 /******************************************************************************/
@@ -15,6 +16,14 @@ void kmain(void) {
 }
 
 /******************************************************************************/
+size_t strlen(const char* str) {
+	size_t len = 0;
+	while (str[len]) {
+		len++;
+	}
+	return len;
+}
+
 void terminal_putchar(char c) {
 	if (c == '\n') {
 		terminal_column = 0;
