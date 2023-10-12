@@ -1,0 +1,7 @@
+boot
+boot.flp
+*.o
+*.lst
+
+# General
+.DS_Store
