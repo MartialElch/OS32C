@@ -378,7 +378,7 @@ void set_idt(void *base, unsigned int limit) {
    i[0] = limit << 16;
    i[1] = (unsigned int) base;
    asm volatile (
-		"	lidt %0"
+		"	lidt (%0)"
 		: /* no output */
 		: "p" (((char *) i)+2)
 		: );
