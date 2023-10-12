@@ -5,18 +5,18 @@
 	mov ss, ax
 	mov sp, 0x9C00
 
-	mov si, msg_load	; print message
+	mov si, msg_load	; print load message
 	call sprint
 
-	call read_floppy
+	call read_floppy	; read kernel from floppy disk
 
-	mov si, msg_prot	; print message
+	mov si, msg_prot	; tell user we are going to protected mode
 	call sprint
 
-	cli					; no interrupt
-	push ds				; save real mode
-	lidt [idtr]			; load idt register
-	lgdt [gdtr]			; load gdt register
+	cli			; no interrupt
+	push ds			; save real mode
+	lidt [idtr]		; load idt register
+	lgdt [gdtr]		; load gdt register
 
 	call reprogram_pic
 
