@@ -1,6 +1,6 @@
 ASFLAGS = -l $@.lst
 CFLAGS  = -Wall -Wextra -Werror -nostdlib -m32 -march=i386 \
-          -O0 -Xassembler -al=$@.lst std=c99
+          -O0 -Xassembler -al=$@.lst -std=c99
 LDFLAGS = --oformat=binary -Ttext=0x10000 -defsym _start=kmain \
           -melf_i386
 
