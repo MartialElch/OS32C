@@ -27,7 +27,7 @@ void terminal_writestring(const char*);
 void kmain(void) {
 	terminal_row = 0;
 	terminal_column = 0;
-	terminal_color = COLOR
+	terminal_color = COLOR;
 
 	terminal_buffer = (uint16_t*) 0xb8000;
 	terminal_buffer[0] = 0x0a41;
