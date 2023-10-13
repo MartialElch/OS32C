@@ -25,7 +25,14 @@ void terminal_writestring(const char*);
 
 /******************************************************************************/
 void kmain(void) {
-	terminal_writestring("Hello World");
+	terminal_row = 0;
+	terminal_column = 0;
+	terminal_color = COLOR
+
+	terminal_buffer = (uint16_t*) 0xb8000;
+	terminal_buffer[0] = 0x0a41;
+
+	// terminal_writestring("Hello World");
 
 	while (1) {
 	}
@@ -102,10 +109,11 @@ void terminal_write(const char* data, size_t size) {
 	for (size_t i = 0; i < size; i++) {
 		terminal_putchar(data[i]);	
 	}
+
+	terminal_refresh();
 }
 
-void terminal_writestring(const char* data) 
-{
+void terminal_writestring(const char* data) {
 	terminal_write(data, strlen(data));
 }
 
