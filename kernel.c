@@ -28,7 +28,7 @@ void kmain(void) {
 
 	terminal_buffer = (uint16_t*) 0xb8000;
 
-	terminal_writestring("Hello World");
+	terminal_writestring("start kernel\n");
 
 	irq_init();
 	irq_register(IRQ_KEYBOARD+IRQ_BASE, &key_handler, TYPE_IRQ);
@@ -121,12 +121,25 @@ void terminal_writestring(const char* data) {
 
 /******************************************************************************/
 /* IRQ handling */
+static inline uint8_t inb(uint16_t port) {
+	uint8_t v;
+
+	__asm volatile (
+		"inb %1, %0"
+		: "=a" (v)
+		: "dN" (port)
+		: /* no globber */);
+
+	return v;
+}
 static inline void outb(uint8_t v, uint16_t port) {
 	__asm volatile (
 		"outb %0, %1"
 		: /* no output */
 		: "a" (v), "dN" (port)
 		: /* no globber */);
+
+	return;
 }
 
 void irq_setidt(void *base, unsigned int limit) {
@@ -156,7 +169,7 @@ void irq_enable(void) {
 }
 
 void irq_register(int n, void* addr, uint8_t type) {
-	terminal_writestring("register IRQ ");
+	terminal_writestring("register IRQ\n");
 
 	idt[n].offset_1 = (uint32_t)addr & 0xffff;
 	idt[n].offset_2 = ((uint32_t)addr >> 16) & 0xffff;
@@ -166,15 +179,11 @@ void irq_register(int n, void* addr, uint8_t type) {
 }
 
 void key_handler(void) {
-	__asm volatile (
-		"	pusha");
+	__asm ("pusha");
 	terminal_writestring("key_handler entry\n");
 	outb(0x20, 0x20);
 	terminal_writestring("key_handler done\n");
-	__asm volatile (
-		"popa\n"
-		"leave\n"
-		"iret\n");
+	__asm ("popa; leave; iret");
 }
 
 /******************************************************************************/
