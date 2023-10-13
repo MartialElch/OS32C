@@ -122,7 +122,7 @@ void terminal_writestring(const char* data) {
 /******************************************************************************/
 /* IRQ handling */
 static inline void outb(uint8_t v, uint16_t port) {
-	asm volatile (
+	__asm volatile (
 		"outb %0, %1"
 		: /* no output */
 		: "a" (v), "dN" (port)
