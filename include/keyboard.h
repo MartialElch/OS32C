@@ -6,4 +6,6 @@ struct KeyElement {
 	char    c;
 };
 
+void keybuffer_add(uint_8);
+
 #endif

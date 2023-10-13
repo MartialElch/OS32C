@@ -2,7 +2,7 @@
 
 struct KeyElement keybuffer;
 
-void keybuffer_add(uint_8 k) {
+void keybuffer_add(uint_8 keycode) {
 	return;
 }
 
