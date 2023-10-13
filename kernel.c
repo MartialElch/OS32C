@@ -2,16 +2,13 @@
 #include <stddef.h>
 
 #include "irq.h"
+#include "types.h"
 
 /******************************************************************************/
 #define VGA_WIDTH  80
 #define VGA_HEIGHT 25
 
 #define COLOR	0x0a
-
-typedef unsigned char			uint8_t;
-typedef unsigned short int		uint16_t;
-typedef unsigned int			uint32_t;
 
 /******************************************************************************/
 size_t terminal_row;
