@@ -130,10 +130,10 @@ void irq_register(int n, void* addr, uint8_t type) {
 }
 
 void key_handler(void) {
-	asm("pusha");
+	__asm volatile ("pusha");
 	terminal_writestring("key_handler entry\n");
 	terminal_writestring("key_handler done\n");
-	asm("popa; leave; iret");
+	__asm volatile ("popa; leave; iret");
 }
 
 /******************************************************************************/

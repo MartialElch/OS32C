@@ -25,4 +25,4 @@ void irq_register(int, void*, uint8_t);
 // IRQ handler
 void key_handler(void);
 
-#endif:q
+#endif
