@@ -20,6 +20,8 @@ enum Interrupts {
 	IRQ_KEYBOARD = 1
 };
 
+void irq_enable(void);
+void irq_init(void);
 void irq_register(int, void*, uint8_t);
 
 // IRQ handler

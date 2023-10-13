@@ -30,7 +30,9 @@ void kmain(void) {
 
 	terminal_writestring("Hello World");
 
+	irq_init();
 	irq_register(IRQ_KEYBOARD+IRQ_BASE, &key_handler, TYPE_IRQ);
+	irq_enable();
 
 	while (1) {
 	}
@@ -119,6 +121,32 @@ void terminal_writestring(const char* data) {
 
 /******************************************************************************/
 /* IRQ handling */
+void irq_setidt(void *base, unsigned int limit) {
+   unsigned int i[2];
+
+   i[0] = limit << 16;
+   i[1] = (unsigned int) base;
+   __asm volatile (
+		"	lidt (%0)"
+		: /* no output */
+		: "p" (((char *) i)+2)
+		: /* no globber */);
+}
+
+void irq_init(void) {
+	irq_setidt((void*)idt, 256*8-1);
+
+	return;
+}
+
+void irq_enable(void) {
+	__asm volatile (
+		"	sti"
+		: /* no output */
+		: /* no input */
+		: /* no globber */);
+}
+
 void irq_register(int n, void* addr, uint8_t type) {
 	terminal_writestring("register IRQ ");
 
@@ -130,10 +158,14 @@ void irq_register(int n, void* addr, uint8_t type) {
 }
 
 void key_handler(void) {
-	__asm volatile ("pusha");
+	__asm volatile (
+		"	pusha");
 	terminal_writestring("key_handler entry\n");
 	terminal_writestring("key_handler done\n");
-	__asm volatile ("popa; leave; iret");
+	__asm volatile (
+		"popa\n"
+		"leave\n"
+		"iret\n");
 }
 
 /******************************************************************************/
