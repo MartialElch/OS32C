@@ -15,4 +15,11 @@ struct IDTDescr {
 
 struct IDTDescr idt[256];
 
-#endif
+enum Interrupts {
+	IRQ_BASE     = 32,
+	IRQ_KEYBOARD = 1
+};
+
+void irq_register(int, void*, uint8_t);
+
+#endif:q

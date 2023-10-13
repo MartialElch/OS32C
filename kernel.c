@@ -30,6 +30,8 @@ void kmain(void) {
 
 	terminal_writestring("Hello World");
 
+	irq_register(IRQ_KEYBOARD+IRQ_BASE, &key_handler, TYPE_IRQ);
+
 	while (1) {
 	}
 }
@@ -125,6 +127,13 @@ void irq_register(int n, void* addr, uint8_t type) {
 	idt[n].selector = 0x08;
 	idt[n].type_attr = type;
 	idt[n].zero = 0x00;
+}
+
+void key_handler(void) {
+	asm("pusha");
+	terminal_writestring("key_handler entry\n");
+	terminal_writestring("key_handler done\n");
+	asm("popa; leave; iret");
 }
 
 /******************************************************************************/
