@@ -1,5 +1,5 @@
-#ifndef _IRQ_H
-#define _IRQ_H
+#ifndef _KEYBOARD_H
+#define _KEYBOARD_H
 
 struct KeyElement {
 	uint8_t code;
