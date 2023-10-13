@@ -121,6 +121,14 @@ void terminal_writestring(const char* data) {
 
 /******************************************************************************/
 /* IRQ handling */
+static inline void outb(uint8_t v, uint16_t port) {
+	asm volatile (
+		"outb %0, %1"
+		: /* no output */
+		: "a" (v), "dN" (port)
+		: /* no globber */);
+}
+
 void irq_setidt(void *base, unsigned int limit) {
    unsigned int i[2];
 
@@ -161,6 +169,7 @@ void key_handler(void) {
 	__asm volatile (
 		"	pusha");
 	terminal_writestring("key_handler entry\n");
+	outb(0x20, 0x20);
 	terminal_writestring("key_handler done\n");
 	__asm volatile (
 		"popa\n"
