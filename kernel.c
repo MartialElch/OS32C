@@ -124,6 +124,12 @@ void terminal_writestring(const char* data) {
 /* IRQ handling */
 void irq_register(int n, void* addr, uint8_t type) {
 	terminal_writestring("register IRQ ");
+
+	idt[n].offset_1 = (uint32_t)addr & 0xffff;
+	idt[n].offset_2 = ((uint32_t)addr >> 16) & 0xffff;
+	idt[n].selector = 0x08;
+	idt[n].type_attr = type;
+	idt[n].zero = 0x00;
 }
 
 /******************************************************************************/
