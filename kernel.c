@@ -1,6 +1,8 @@
 /******************************************************************************/
 #include <stddef.h>
 
+#include <irg.h>
+
 /******************************************************************************/
 #define VGA_WIDTH  80
 #define VGA_HEIGHT 25
@@ -38,6 +40,8 @@ void kmain(void) {
 }
 
 /******************************************************************************/
+/* terminal handling */
+
 static inline uint16_t vga_entry(unsigned char uc, uint8_t color) {
 	return (uint16_t) uc | (uint16_t) color << 8;
 }
@@ -114,6 +118,12 @@ void terminal_write(const char* data, size_t size) {
 
 void terminal_writestring(const char* data) {
 	terminal_write(data, strlen(data));
+}
+
+/******************************************************************************/
+/* IRQ handling */
+void irq_register(int n, void* addr, uint8_t type) {
+	terminal_writestring("register IRQ ");
 }
 
 /******************************************************************************/
