@@ -179,8 +179,14 @@ void irq_register(int n, void* addr, uint8_t type) {
 }
 
 void key_handler(void) {
+	uint8_t c, k;
+
 	__asm ("pusha");
 	terminal_writestring("key_handler entry\n");
+	k = inb(0x60);
+	c = inb(0x61);
+	outb(c | 0x80, 0x61);
+	outb(c, 0x61);
 	outb(0x20, 0x20);
 	terminal_writestring("key_handler done\n");
 	__asm ("popa; leave; iret");
