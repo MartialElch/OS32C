@@ -1,4 +1,5 @@
-boot.bin kernel.bin
+boot.bin
+kernel.bin
 boot.flp
 *.o
 *.lst
