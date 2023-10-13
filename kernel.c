@@ -34,6 +34,8 @@ void kmain(void) {
 	irq_register(IRQ_KEYBOARD+IRQ_BASE, &key_handler, TYPE_IRQ);
 	irq_enable();
 
+	shell();
+
 	while (1) {
 	}
 }
