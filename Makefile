@@ -9,7 +9,7 @@ AS = nasm
 CC = gcc
 LD = ld
 
-OBJS = kernel.o
+OBJS = kernel.o shell.o
 BINS = boot.bin kernel.bin
 
 all:	boot.flp
