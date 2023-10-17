@@ -3,6 +3,7 @@
 #include "types.h"
 #include "keyboard.h"
 #include "shell.h"
+#include "terminal.h"
 
 /******************************************************************************/
 #define VGA_WIDTH  80
@@ -16,11 +17,7 @@ size_t terminal_column;
 uint8_t terminal_color;
 
 volatile uint16_t* terminal_buffer;
-
 volatile uint16_t VGA_BUFFER[VGA_WIDTH*VGA_HEIGHT];
-
-/******************************************************************************/
-void terminal_writestring(const char*);
 
 /******************************************************************************/
 void kmain(void) {
