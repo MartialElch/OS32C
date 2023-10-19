@@ -7,6 +7,7 @@ keyboard_getcharacter
 
 uint8_t keyboard_getcharacter(uint8_t keycode) {
 	return 'a';
+	return keymap[keycode];
 }
 
 void keybuffer_add(uint8_t keycode) {
