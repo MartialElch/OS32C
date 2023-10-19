@@ -1,9 +1,8 @@
 #include "keyboard.h"
+#include "terminal.h"
 
 uint8_t keybuffer[256];
 uint8_t keypos;
-
-keyboard_getcharacter
 
 uint8_t keyboard_getcharacter(uint8_t keycode) {
 	return 'a';
