@@ -189,6 +189,7 @@ void key_handler(void) {
 	outb(c | 0x80, 0x61);
 	outb(c, 0x61);
 	outb(0x20, 0x20);
+	terminal_writestring("call keybuffer_add\n");
 	keybuffer_add(k);
 	terminal_writestring("key_handler done\n");
 	__asm ("popa; leave; iret");
