@@ -33,7 +33,7 @@ void keybuffer_add(uint8_t keycode) {
 	keybuffer[keypos] = '\0';
 
 	terminal_writestring("keybuffer: ");
-	terminal_writestring(keybuffer);
+	terminal_writestring((const char *)keybuffer);
 	terminal_writestring("\n");
 
 	return;
