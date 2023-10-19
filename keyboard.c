@@ -24,7 +24,6 @@ uint8_t keybuffer[256];
 uint8_t keypos;
 
 uint8_t keyboard_getcharacter(uint8_t keycode) {
-	return 'a';
 	return keymap[keycode];
 }
 
