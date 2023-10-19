@@ -189,7 +189,8 @@ void key_handler(void) {
 	outb(c | 0x80, 0x61);
 	outb(c, 0x61);
 	outb(0x20, 0x20);
-	if (k | 0x80) {			// ignore key release
+	if (k & 0x80) {
+	} else {			// ignore key release
 		terminal_writestring("call keybuffer_add\n");
 		keybuffer_add(k);
 	}
