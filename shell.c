@@ -18,6 +18,7 @@ void shell() {
 				terminal_writestring("evaluate\n");
 				terminal_writestring("c:> ");
 			} else {
+				terminal_writestring("got key\n");
 				terminal_putchar(c);
 				i = i + 1;
 			}
