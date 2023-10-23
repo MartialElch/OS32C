@@ -1,6 +1,9 @@
 #include "terminal.h"
 
 void evaluate(char *s) {
+	terminal_writestring(s);
+	terminal_writestring("\n");
+
 	return;
 }
 
@@ -27,7 +30,6 @@ void shell() {
 				evaluate(s);
 				terminal_writestring("c:> ");
 			} else {
-				terminal_writestring("got key\n");
 				terminal_putchar(c);
 				i = i + 1;
 			}
