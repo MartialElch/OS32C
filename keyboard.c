@@ -50,7 +50,3 @@ void keybuffer_init(void) {
 
 	return;
 }
-
-char keybuffer_read() {
-	return 'a';
-}
