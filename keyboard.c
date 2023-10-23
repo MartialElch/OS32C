@@ -25,9 +25,12 @@ static int keyboard_readpos;
 static int keyboard_writepos;
 
 char keybuffer_getchar(void) {
+	char c;
+
 	if (keyboard_writepos > keyboard_readpos) {
-		return keybuffer[keyboard_readpos];
+		c = keybuffer[keyboard_readpos];
 		keyboard_readpos = keyboard_readpos + 1;
+		return c;
 	} else {
 		return 0;
 	}
