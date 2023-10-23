@@ -1,5 +1,13 @@
 #include "terminal.h"
 
+void evaluate(char *s) {
+	return;
+}
+
+void reset_buffer() {
+	return;
+}
+
 void shell() {
 	static char s[80];
 	char c;
@@ -16,6 +24,7 @@ void shell() {
 			if (c == '\n') {
 				terminal_writestring("\n");
 				terminal_writestring("evaluate\n");
+				evaluate(s);
 				terminal_writestring("c:> ");
 			} else {
 				terminal_writestring("got key\n");

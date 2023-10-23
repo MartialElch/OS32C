@@ -26,7 +26,8 @@ static int keyboard_writepos;
 
 char keybuffer_getchar(void) {
 	if (keyboard_writepos > keyboard_readpos) {
-		return keybuffer[keyboard_readpos++];
+		return keybuffer[keyboard_readpos];
+		keyboard_readpos = keyboard_readpos + 1;
 	} else {
 		return 0;
 	}
@@ -36,6 +37,7 @@ void keybuffer_write(uint8_t keycode) {
 	if (!(keycode&0x80)) {	// ignore key release
 		if (keymap[keycode] != '\0') {
 			keybuffer[keyboard_writepos] = keymap[keycode];
+			keyboard_writepos = keyboard_writepos + 1;
 			terminal_putchar(keymap[keycode]);
 			terminal_refresh();
 		}
