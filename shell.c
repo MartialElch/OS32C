@@ -18,7 +18,7 @@ void shell() {
 
 	// initialize
 	i = 0;
-	s[0] = '\0';
+	s[i] = '\0';
 
 	terminal_writestring("c:> ");
 
@@ -30,8 +30,10 @@ void shell() {
 				evaluate(s);
 				terminal_writestring("c:> ");
 			} else {
+				s[i++] = c;
+				s[i] = '\0';
 				terminal_putchar(c);
-				i = i + 1;
+				terminal_refresh();
 			}
 		}
 	}
