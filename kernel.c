@@ -20,6 +20,8 @@ volatile uint16_t* terminal_buffer;
 volatile uint16_t VGA_BUFFER[VGA_WIDTH*VGA_HEIGHT];
 
 /******************************************************************************/
+/* kernel */
+
 void kmain(void) {
 	terminal_row = 0;
 	terminal_column = 0;
@@ -122,6 +124,7 @@ void terminal_writestring(const char* data) {
 
 /******************************************************************************/
 /* IRQ handling */
+
 static inline uint8_t inb(uint16_t port) {
 	uint8_t v;
 
@@ -189,13 +192,17 @@ void key_handler(void) {
 	outb(c | 0x80, 0x61);
 	outb(c, 0x61);
 	outb(0x20, 0x20);
-	if (k & 0x80) {
-	} else {			// ignore key release
-		terminal_writestring("call keybuffer_add\n");
-		keybuffer_add(k);
-	}
+	terminal_writestring("call keybuffer_write\n");
+	keybuffer_write(k);
 	terminal_writestring("key_handler done\n");
 	__asm ("popa; leave; iret");
+}
+
+/******************************************************************************/
+/* system calls */
+
+char sys_getchar(void) {
+	return keybuffer_getchar();
 }
 
 /******************************************************************************/

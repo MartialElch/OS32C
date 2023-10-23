@@ -20,28 +20,33 @@ static char keymap[] = {
 	'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'		// 78
 };
 
-uint8_t keybuffer[256];
-uint8_t keypos;
+static char keybuffer[KEYBUFFERSIZE];
+static int keyboard_readpos;
+static int keyboard_writepos;
 
-uint8_t keyboard_getcharacter(uint8_t keycode) {
-	return keymap[keycode];
+char keybuffer_getchar(void) {
+	if (keyboard_writepos > keyboard_readpos) {
+		return keybuffer[keyboard_readpos++];
+	} else {
+		return 0;
+	}
 }
 
-void keybuffer_add(uint8_t keycode) {
-	keybuffer[keypos] = keyboard_getcharacter(keycode);
-	keypos = keypos + 1;
-	keybuffer[keypos] = '\0';
-
-	terminal_writestring("keybuffer: ");
-	terminal_writestring((const char *)keybuffer);
-	terminal_writestring("\n");
+void keybuffer_write(uint8_t keycode) {
+	if (!(keycode&0x80)) {	// ignore key release
+		if (keymap[keycode] != '\0') {
+			keybuffer[keyboard_writepos] = keymap[keycode];
+			terminal_putchar(keymap[keycode]);
+			terminal_refresh();
+		}
+	}
 
 	return;
 }
 
 void keybuffer_init(void) {
-	keypos = 0;
-	keybuffer[keypos] = '\0';
+	keyboard_readpos = 0;
+	keyboard_writepos = 0;
 
 	return;
 }
