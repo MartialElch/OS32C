@@ -1,20 +1,15 @@
-CFLAGS  = -std=gnu99 -nostdlib -m32 -march=i386 -ffreestanding -fno-asynchronous-unwind-tables
-# ASFLAGS = -Wa,-a=kernel.lst
-LDFLAGS = -Wl,--nmagic,--script=kernel.ld
+ASFLAGS = -l $@.lst
 
 AS = nasm
-CC = gcc
 
-all:	floppy
+all:	boot.flp
 
-floppy:
-	dd if=/dev/zero of=floppy.img bs=512 count=2880
-	$(AS) boot.asm -f bin -o boot.bin
-	dd if=boot.bin of=floppy.img bs=512 conv=notrunc
-	$(CC) -o kernel.bin $(CFLAGS) $(ASFLAGS) $(LDFLAGS) kernel.c
-	# $(AS) kernel.asm -f bin -o kernel.bin -l kernel.lst
-	dd if=kernel.bin of=floppy.img bs=512 seek=1 conv=notrunc
+boot.bin:	boot.asm
+	$(AS) $< -f bin -o $@
+
+boot.flp:	boot.bin
+	dd if=/dev/zero of=boot.flp bs=512 count=2880
+	dd if=boot.bin of=boot.flp bs=512 conv=notrunc
 
 clean:
-	rm -f boot.bin kernel.bin floppy.img
-	rm -f kernel.lst kernel.o
+	rm -f boot.bin boot.flp
