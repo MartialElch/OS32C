@@ -41,8 +41,6 @@ void keybuffer_write(uint8_t keycode) {
 		if (keymap[keycode] != '\0') {
 			keybuffer[keyboard_writepos] = keymap[keycode];
 			keyboard_writepos = keyboard_writepos + 1;
-			terminal_putchar(keymap[keycode]);
-			terminal_refresh();
 		}
 	}
 
