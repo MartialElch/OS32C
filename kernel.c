@@ -21,6 +21,7 @@ volatile uint16_t VGA_BUFFER[VGA_WIDTH*VGA_HEIGHT];
 
 /******************************************************************************/
 /* kernel */
+void system_halt(void);
 
 void kmain(void) {
 	terminal_row = 0;
@@ -37,8 +38,12 @@ void kmain(void) {
 
 	shell();
 
-	while (1) {
-	}
+	system_halt(); // exit message and stop system
+}
+
+void system_halt() {
+	terminal_writestring("stop system\n");
+	__asm volatile("cli;hlt");
 }
 
 /******************************************************************************/
