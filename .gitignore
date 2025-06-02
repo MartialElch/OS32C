@@ -1,3 +1,4 @@
 boot
 boot.flp
+*.o
 *.lst

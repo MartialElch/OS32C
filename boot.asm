@@ -1,4 +1,6 @@
 ;boot.asm
+%define NR_SECTORS 0x08
+
 [ORG 0x7C00]
     xor ax, ax
     mov ds, ax
@@ -7,6 +9,8 @@
 
     mov si, msg_welcome       ; print welcome message
     call bios_print
+
+    call read_floppy        ; read kernel from floppy
 
     mov si, msg_protected     ; switch processor to protected mode
     call bios_print
@@ -20,6 +24,10 @@
     or  al, 0x01
     mov cr0, eax
     jmp codesel:go_pm
+
+error:
+    mov si, msg_error
+    call bios_print
 
     cli                       ; stop processor
     hlt
@@ -35,40 +43,7 @@ go_pm:
     mov ax, videosel          ; set videoselector
     mov gs, ax
 
-    mov ah, COLOR
-    mov esi, msg_welcomeprot  ; print welcome message
-    mov bx, 240               ; on line 4
-    shl bx, 1
-printString:
-    lodsb
-    cmp al, 0
-    je printStringDone
-    mov word [gs:bx], ax
-    add bx, 2
-    jmp printString
-printStringDone:
-
-    mov bx, 320               ; set cursor position
-                              ; to start of 5th line
-    mov dx, 0x03D4
-    mov al, 0x0F
-    out dx, al
-    mov ax, bx
-    mov dx, 0x03D5
-    out dx, al
-
-    mov dx, 0x03D4
-    mov al, 0x0E
-    out dx, al
-    mov ax, bx
-    shr ax, 8
-    mov dx, 0x03D5
-    out dx, al
-
-    shl bx, 1                 ; set cursor color
-    mov al, ' '
-    mov ah, COLOR
-    mov word [gs:bx], ax
+    jmp 0x10000
 
     cli
     hlt
@@ -112,7 +87,11 @@ gdt_end:
 
 msg_welcome     db 'booting me up ...', 13, 10, 0
 msg_protected   db 'switch to protected mode', 13, 10, 0
-msg_welcomeprot db 'welcome to protected mode', 0
+msg_loading    db 'loading ', 0
+msg_hash       db '.', 0
+msg_done       db 'done', 13, 10, 0
+msg_crlf       db 13, 10, 0
+msg_error      db 'error', 13, 10, 0
 
 ;--------------------
 bios_print:
@@ -123,6 +102,50 @@ bios_print:
     int 0x10                ; write char
     jmp bios_print          ; next
 bios_print_return:
+    ret
+
+;--------------------
+read_floppy:
+    mov si, msg_loading
+    call bios_print
+
+    mov ah, 0x00        ; reset floppy controller
+    int 0x13            ; execute command
+    jc error
+
+    mov ax, 0x1000      ; set buffer address
+    mov es, ax
+    mov bx, 0x00
+    mov di, NR_SECTORS  ; sectors to read
+    mov cl, 0x02        ; start at sector 2
+    mov ch, 0x00        ; track  = 1
+read_sector:
+    mov si, msg_hash
+    call bios_print
+    mov ah, 0x02        ; read data from floppy
+    mov al, 0x01        ; number of sectors to read
+    mov ch, 0x00        ; track  = 1
+    mov dh, 0x00        ; head   = 1
+    int 0x13            ; execute command
+    jc error
+    dec di
+    jz read_done
+    inc cl
+    mov ax, es
+    add ax, 32
+    mov es, ax
+    cmp cl, 0x13
+    je read_nexttrack
+    jmp read_sector
+read_nexttrack:
+    mov cl, 0x01        ; start next track at sector 0
+    inc ch              ; go to next track
+    jmp read_sector
+read_done:
+    mov si, msg_crlf
+    call bios_print
+    mov si, msg_done
+    call bios_print
     ret
 
 ;--------------------
