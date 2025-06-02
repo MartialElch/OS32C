@@ -30,4 +30,5 @@ boot.flp:	boot kernel.bin
 	dd if=kernel.bin of=boot.flp bs=512 seek=1 conv=notrunc
 
 clean:
-	rm -f boot boot.flp
+	rm -f boot kernel.bin boot.flp
+	rm -f *.o *.lst
