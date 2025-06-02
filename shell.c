@@ -7,8 +7,22 @@
 
 void execute(char *cmd);
 
+void dir() {
+    return;
+}
+
+void dump() {
+    return;
+}
+
 void execute(char *cmd) {
-    if (strcmp(cmd, "exit") == 0) {
+    if (strcmp(cmd, "clear") == 0) {
+        clearScreen();
+    } else if (strcmp(cmd, "dir") == 0) {
+        dir();
+    } else if (strcmp(cmd, "dump") == 0) {
+        dump();
+    } else if (strcmp(cmd, "exit") == 0) {
         exit(0);
     } else if (strcmp(cmd, "") == 0) {
     } else {
