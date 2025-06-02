@@ -11,7 +11,7 @@ CC = /usr/local/bin/x86_64-elf-gcc
 AS = nasm
 LD = /usr/local/bin/x86_64-elf-ld
 
-OBJS = head.o kernel.o
+OBJS = head.o kernel.o terminal.o io.o shell.o
 
 all:	boot.flp
 
