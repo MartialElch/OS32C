@@ -8,9 +8,8 @@ Intended functions
 - enable keyboard input
 - take commands from prompt
 - exit command to stop OS
-- read FAT-12 floppy disk using DAM access
+- read FAT-12 floppy disk using DMA access
 - dir command to read floppy directory
-- scroll screen
 - read COM program from floppy to memory
 - run loaded COM program
 - turn on paging
