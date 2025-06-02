@@ -1,15 +1,15 @@
-ASFLAGS = -l $@.lst
+ASFLAGS = -l $(basename $@).lst
 
 AS = nasm
 
 all:	boot.flp
 
-boot.bin:	boot.asm
-	$(AS) $< -f bin -o $@
+boot:	boot.asm
+	$(AS) $(ASFLAGS) -o $@ $<
 
-boot.flp:	boot.bin
+boot.flp:	boot
 	dd if=/dev/zero of=boot.flp bs=512 count=2880
-	dd if=boot.bin of=boot.flp bs=512 conv=notrunc
+	dd if=boot of=boot.flp bs=512 conv=notrunc
 
 clean:
-	rm -f boot.bin boot.flp
+	rm -f boot boot.flp
