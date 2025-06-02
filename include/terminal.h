@@ -5,4 +5,5 @@
 void clearScreen(void);
 void printChar(unsigned char);
 void printString(char*);
+void scrollScreen(void);
 void setCursorPos(uint8_t, uint8_t);

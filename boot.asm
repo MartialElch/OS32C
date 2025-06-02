@@ -1,5 +1,5 @@
 ;boot.asm
-%define NR_SECTORS 0x08
+%define NR_SECTORS 0x20
 
 [ORG 0x7C00]
     xor ax, ax
@@ -19,6 +19,8 @@
     push ds                   ; save real mode
     lidt [idtr]               ; load idt register
     lgdt [gdtr]               ; load gdt register
+
+    call reprogram_pic
 
     mov eax, cr0              ; set PE bit of CR0
     or  al, 0x01
@@ -146,6 +148,35 @@ read_done:
     call bios_print
     mov si, msg_done
     call bios_print
+    ret
+
+;--------------------
+reprogram_pic:
+    mov al,0x11     ; initialization sequence
+    out 0x20,al     ; send it to 8259A-1
+    out 0xA0,al     ; and to 8259A-2
+
+    mov al,0x20     ; start of hardware int's (0x20)
+    out 0x21,al
+
+    mov al,0x28     ; start of hardware int's 2 (0x28)
+    out 0xA1,al
+
+    mov al,0x04     ; 8259-1 is master
+    out 0x21,al
+
+    mov al,0x02     ; 8259-2 is slave
+    out 0xA1,al
+
+    mov al,0x01     ; 8086 mode for both
+    out 0x21,al
+    out 0xA1,al
+
+    mov al,0xFF     ; mask off all interrupts for now
+    out 0xA1,al
+
+    mov al,0xB1     ; mask all irq's but irq2 which
+    out 0x21,al     ; is cascaded
     ret
 
 ;--------------------

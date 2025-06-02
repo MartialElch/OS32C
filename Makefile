@@ -11,7 +11,7 @@ CC = /usr/local/bin/x86_64-elf-gcc
 AS = nasm
 LD = /usr/local/bin/x86_64-elf-ld
 
-OBJS = head.o kernel.o terminal.o io.o shell.o
+OBJS = head.o kernel.o irq.o irqstubtable.o keyboard.o terminal.o io.o shell.o lib.o
 
 all:	boot.flp
 
@@ -22,6 +22,9 @@ boot:	boot.asm
 	$(AS) $(ASFLAGS) -o $@ $<
 
 head.o:	head.asm
+	$(AS) $(ASFLAGS) -f elf32 $< -o $@
+
+irqstubtable.o:	irqstubtable.asm
 	$(AS) $(ASFLAGS) -f elf32 $< -o $@
 
 boot.flp:	boot kernel.bin

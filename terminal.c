@@ -36,6 +36,16 @@ void printChar(unsigned char c) {
         pos++;
     }
 
+    if (pos == VGA_WIDTH) {
+        pos = 0;
+        line++;
+    }
+
+    if (line == VGA_HEIGHT) {
+        scrollScreen();
+        line--;
+    }
+
     setCursorPos(pos, line);
 
     return;
@@ -45,6 +55,26 @@ void printString(char *s) {
     while (*s != '\0') {
         printChar(*s);
         s++;
+    }
+
+    return;
+}
+
+void scrollScreen(void) {
+    volatile unsigned char *videoram = (unsigned char *)0xb8000;
+    int row, col;
+
+    for (row=1; row<VGA_HEIGHT; row++) {
+        for (col=0; col<VGA_WIDTH; col++) {
+            videoram[2*(80*(row-1) + col)]     = videoram[2*(80*row + col)];
+            videoram[2*(80*(row-1) + col) + 1] = videoram[2*(80*row + col) + 1];
+        }
+    }
+
+    /* blank out last line */
+    for (col=0; col<VGA_WIDTH; col++) {
+        videoram[2*(80*(VGA_HEIGHT-1) + col)] = ' ';
+        videoram[2*(80*(VGA_HEIGHT-1) + col) + 1] = COLOR;
     }
 
     return;
