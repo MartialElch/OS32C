@@ -3,7 +3,7 @@
 #define COLOR                0x0a
 
 void clearScreen(void);
-void printChar(unsigned char);
-void printString(char*);
+void writeChar(unsigned char);
+void writeString(char*);
 void scrollScreen(void);
 void setCursorPos(uint8_t, uint8_t);

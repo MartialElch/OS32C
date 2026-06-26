@@ -31,10 +31,113 @@ int getchar(void) {
     return c;
 }
 
+char *itoa(int value, char *string, int radix) {
+    char temp[32];
+    int i = 0;
+    int is_negative = 0;
+    
+    if (value == 0) {
+        string[0] = '0';
+        string[1] = '\0';
+        return string;
+    }
+    
+    if (value < 0 && radix == 10) {
+        is_negative = 1;
+        value = -value;
+    }
+    
+    while (value != 0) {
+        int rem = value % radix;
+        temp[i++] = (rem > 9) ? (rem - 10) + 'A' : rem + '0';
+        value = value / radix;
+    }
+    
+    int j = 0;
+    if (is_negative) {
+        string[j++] = '-';
+    }
+    
+    while (i > 0) {
+        string[j++] = temp[--i];
+    }
+    string[j] = '\0';
+
+    return string;
+}
+
+int printf(const char *format, ...) {
+    char *s, buffer[32];
+    const char *p = format;
+    int n=0, val;
+
+    /* get pointer to variable argument list */
+    __builtin_va_list args;
+    __builtin_va_start(args, format);
+
+    while (*p != '\0') {
+        if (*p == '%') {
+            p++;
+            switch (*p) {
+                case 'd': {                     /* decimal integer */
+                    val = __builtin_va_arg(args, int);
+                    itoa(val, buffer, 10);
+                    s = buffer;
+                    while (*s != '\0') {
+                        putchar(*s);
+                        s++;
+                    }
+                    break;
+                }
+                case 'x': {                     /* hexadecimal integer */
+                    val = __builtin_va_arg(args, int);
+                    itoa(val, buffer, 16);
+                    s = buffer;
+                    while (*s != '\0') {
+                        putchar(*s);
+                        s++;
+                    }
+                    break;
+                }
+                default: {                      /* unknown */
+                    buffer[0] = '%';
+                    buffer[1] = *p;
+                    buffer[2] = '\0';
+                    s = buffer;
+                    while (*s != '\0') {
+                        putchar(*s);
+                        s++;
+                    }
+                    break;
+                }
+            }
+            p++;
+        } else {
+            /* regular character */
+            putchar(*p);
+            p++;
+        }
+    }
+
+    __builtin_va_end(args);
+
+    return n;
+}
+
 int putchar(int c) {
-    printChar(c);
+    writeChar(c);
 
     return c;
+}
+
+int puts(const char *s) {
+    while (*s != '\0') {
+        putchar(*s);
+        s++;
+    }
+    putchar('\n');
+
+    return 1;
 }
 
 int strcmp(const char *s1, const char *s2) {

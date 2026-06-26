@@ -26,8 +26,8 @@ void execute(char *cmd) {
         exit(0);
     } else if (strcmp(cmd, "") == 0) {
     } else {
-        printString(cmd);
-        printString(" not found\n");
+        printf(cmd);
+        printf(" not found\n");
     }
 
     return;
@@ -40,7 +40,7 @@ void shell(void) {
 
     cmd[0] = '\0';
 
-    printString(PROMPT);
+    printf(PROMPT);
 
     while ((c = getchar())) {
         putchar(c);
@@ -48,7 +48,7 @@ void shell(void) {
             execute(cmd);
             cmd[0] = '\0';
             i = 0;
-            printString(PROMPT);
+            printf(PROMPT);
         } else {
             cmd[i++] = c;
             cmd[i] = '\0';        }

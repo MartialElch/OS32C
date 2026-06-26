@@ -12,7 +12,7 @@ void clearScreen(void) {
 
     for (i=0; i<25; i++) {
         for (j=0; j<80; j++) {
-            printChar(' ');
+            writeChar(' ');
         }
     }
 
@@ -22,7 +22,7 @@ void clearScreen(void) {
     return;
 }
 
-void printChar(unsigned char c) {
+void writeChar(unsigned char c) {
     volatile unsigned char *videoram = (unsigned char *)0xb8000;
 
     if (c == '\r') {
@@ -51,9 +51,9 @@ void printChar(unsigned char c) {
     return;
 }
 
-void printString(char *s) {
+void writeString(char *s) {
     while (*s != '\0') {
-        printChar(*s);
+        writeChar(*s);
         s++;
     }
 
