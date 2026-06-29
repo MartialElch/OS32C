@@ -25,4 +25,7 @@ extern void* isr_stub_table[];
 
 void initIRQ(void);
 void registerIRQ(uint8_t n, void* isr);
+void setIRQ(uint8_t irq);
+void timerSleep(int t);
+void waitIRQ(uint8_t irq);
 void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags);

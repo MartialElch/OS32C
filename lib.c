@@ -69,7 +69,8 @@ char *itoa(int value, char *string, int radix) {
 int printf(const char *format, ...) {
     char *s, buffer[32];
     const char *p = format;
-    int n=0, val;
+    int i, n=0, val, width=0;
+	char pad = ' ';
 
     /* get pointer to variable argument list */
     __builtin_va_list args;
@@ -78,14 +79,33 @@ int printf(const char *format, ...) {
     while (*p != '\0') {
         if (*p == '%') {
             p++;
+
+			if (*p == '0') {					/* optional pad with 0 */
+				pad = '0';
+				p++;
+			}
+
+			while ((*p >= '0') && (*p <= '9')) {/* optional field length*/
+				width = width*10 + (*p - '0');
+				p++;
+			}
+
             switch (*p) {
                 case 'd': {                     /* decimal integer */
                     val = __builtin_va_arg(args, int);
                     itoa(val, buffer, 10);
                     s = buffer;
+
+                    /* pad to width */
+                    for (i=strlen(buffer); i<width; i++) {
+                        putchar(pad);
+                        n++;
+                    }
+
                     while (*s != '\0') {
                         putchar(*s);
                         s++;
+                        n++;
                     }
                     break;
                 }
@@ -93,9 +113,17 @@ int printf(const char *format, ...) {
                     val = __builtin_va_arg(args, int);
                     itoa(val, buffer, 16);
                     s = buffer;
+
+                    /* pad to width */
+                    for (i=strlen(buffer); i<width; i++) {
+                        putchar(pad);
+                        n++;
+                    }
+
                     while (*s != '\0') {
-                        putchar(*s);
+                        putchar(tolower(*s));
                         s++;
+                        n++;
                     }
                     break;
                 }
@@ -107,6 +135,7 @@ int printf(const char *format, ...) {
                     while (*s != '\0') {
                         putchar(*s);
                         s++;
+                        n++;
                     }
                     break;
                 }
@@ -116,6 +145,7 @@ int printf(const char *format, ...) {
             /* regular character */
             putchar(*p);
             p++;
+            n++;
         }
     }
 
@@ -161,4 +191,22 @@ int strcmp(const char *s1, const char *s2) {
     }
 
     return rc;
+}
+
+int strlen(const char* str) 
+{
+	int len = 0;
+	while (str[len]) {
+		len++;
+	}
+
+	return len;
+}
+
+int tolower(int c) {
+	if ((c >= 'A') && (c <= 'Z')) {
+		c = c - ('A' - 'a');
+	}
+
+	return c;
 }

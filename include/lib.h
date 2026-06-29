@@ -5,3 +5,5 @@ int printf(const char *format, ...);
 int putchar(int c);
 int puts(const char *s);
 int strcmp(const char *s1, const char *s2);
+int strlen(const char* str); 
+int tolower(int c);

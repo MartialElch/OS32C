@@ -1,17 +1,42 @@
 #include <types.h>
 #include <terminal.h>
 #include <lib.h>
+#include <floppy.h>
 
 #define MAX_CMD 80
 #define PROMPT  "c:> "
 
+void dump(uint32_t addr, uint16_t n);
 void execute(char *cmd);
 
 void dir() {
+    char buffer[512];
+
+    floppyRead(0x0, (uint32_t)buffer, 32);
+    dump((uint32_t)buffer, 32);
+
     return;
 }
 
-void dump() {
+void dump(uint32_t addr, uint16_t n) {
+    volatile uint8_t* mem;
+    uint32_t i;
+
+	mem = 0;
+	for (i=0; i<n; i++) {
+		if ((i%16) == 0) {
+			if ((i > 0) & (i<n)) {
+				printf("\n");
+			}
+			printf("000000  ");
+		}
+		if ((i%16) == 8) {
+			printf(" ");
+		}
+		printf("%02x ", mem[addr+i]);
+	}
+	printf("\n");
+
     return;
 }
 
@@ -21,7 +46,7 @@ void execute(char *cmd) {
     } else if (strcmp(cmd, "dir") == 0) {
         dir();
     } else if (strcmp(cmd, "dump") == 0) {
-        dump();
+        dump(0x4000, 32);
     } else if (strcmp(cmd, "exit") == 0) {
         exit(0);
     } else if (strcmp(cmd, "") == 0) {

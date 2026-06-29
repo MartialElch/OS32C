@@ -4,21 +4,36 @@
 #include <irq.h>
 #include <keyboard.h>
 
+/* DEBUG */
+#include <floppy.h>
+void dump(uint32_t addr, uint16_t n);
+
 void shell(void);
 void systemhalt(void);
 
 void kmain(void) {
+	/* DEBUG */
+	char buffer[512];
+
     clearScreen();
 
     printf("starting kernel ...\n");
 
-	printf("[DEBUG] 1234 = %d\n", 1234);
-	printf("[DEBUG] 0x12dead56 = %x\n", 0x12DEAD56);
-
     initIRQ();
-    registerIRQ(IRQ_KEYBOARD, &key_handler);
+    registerIRQ(IRQ_KEYBOARD, &keyboardHandler);
+    registerIRQ(IRQ_FLOPPY, &floppyHandler);
 
     keyboardInit();
+
+	/* DEBUG */
+	printf("[DEBUG] IRQ_KEYBOARD = 0x%x\n", IRQ_KEYBOARD);
+	printf("[DEBUG] IRQ_FLOPPY = 0x%x\n", IRQ_FLOPPY);
+
+	floppyReset();
+	floppyInit();
+	floppyReset();
+    floppyRead(0x0, (uint32_t)buffer, 32);
+    dump((uint32_t)buffer, 32);
 
     shell();
 

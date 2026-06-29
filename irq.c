@@ -1,10 +1,13 @@
 #include <types.h>
 #include <io.h>
 #include <irq.h>
+#include <lib.h>
 
 static idt_entry_t idt[IDT_MAX_DESCRIPTORS];
 static idtr_t idtr;
 static bool vectors[IDT_MAX_DESCRIPTORS];
+
+volatile uint8_t IRQ[16];
 
 void exception_handler() {
     __asm__ volatile ("cli; hlt"); /* Completely hangs the computer */
@@ -43,6 +46,28 @@ void registerIRQ(uint8_t n, void* isr) {
 
     __asm__ volatile (
         "sti");
+}
+
+void setIRQ(uint8_t irq) {
+	IRQ[irq] = 1;
+}
+
+void timerSleep(int t) {
+    int i, j;
+	for (i=0; i<t; i++) {
+		for (j=0; j<60000000; j++) {
+		}
+	}
+}
+
+void waitIRQ(uint8_t irq) {
+	while (IRQ[irq] == 0) {
+		/* wait */
+		timerSleep(1);
+	} 
+	IRQ[irq] = 0;
+
+	printf("IRQ %x received\n", irq);
 }
 
 void idt_set_descriptor(uint8_t n, void* isr, uint8_t flags) {

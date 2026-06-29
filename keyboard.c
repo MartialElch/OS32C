@@ -22,7 +22,7 @@ void keyboardInit(void) {
     return;
 }
 
-void key_handler(void) {
+void keyboardHandler(void) {
     char a, c;
 
     __asm__ volatile (
@@ -32,8 +32,8 @@ void key_handler(void) {
 
     c = inb(0x60);
     a = inb(0x61);
-    outb(0x61, a & 0x80);
-    outb(0x61, a);
+    outb(a & 0x80, 0x61);
+    outb(a, 0x61);
     outb(0x20, 0x20);
 
     keyboardBufferAdd(c);

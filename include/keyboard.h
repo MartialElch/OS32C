@@ -2,4 +2,4 @@
 
 void keyboardBufferAdd(uint8_t c);
 void keyboardInit(void);
-void key_handler(void);
+void keyboardHandler(void);

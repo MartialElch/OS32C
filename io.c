@@ -13,7 +13,7 @@ uint8_t inb(uint16_t port) {
     return v;
 }
 
-void outb(uint16_t port, uint8_t v) {
+void outb(uint8_t v, uint16_t port) {
     __asm__ volatile (
         "outb %b0, %w1"
         : /* no output */
