@@ -7,11 +7,11 @@ CFLAGS  = -std=c89 -O0 -m32 -mtune=pentium \
           -Iinclude
 LDFLAGS = --oformat=binary -melf_i386 -Ttext=0x10000 -defsym _start=kmain
 
-CC = /usr/local/bin/x86_64-elf-gcc
 AS = nasm
-LD = /usr/local/bin/x86_64-elf-ld
+CC = /opt/cross/bin/i386-linux-gcc
+LD = /opt/cross/bin/i386-linux-ld
 
-OBJS = head.o kernel.o irq.o irqstubtable.o keyboard.o terminal.o io.o shell.o lib.o
+OBJS = head.o kernel.o irq.o irqstubtable.o keyboard.o floppy.o terminal.o io.o shell.o lib.o
 
 all:	boot.flp
 
